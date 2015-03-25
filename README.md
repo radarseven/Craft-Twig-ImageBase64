@@ -18,7 +18,7 @@ This Twig extension requires that you pass an instance of Craft's [`AssetFileMod
 
 The extension can be used as either a Twig filter or as a Twig extension.
 
-### Function
+### As a Twig Function
 
 #### With default options
 
@@ -30,7 +30,7 @@ The extension can be used as either a Twig filter or as a Twig extension.
 
 This will return the base64-encoded string in a [data URI scheme](http://en.wikipedia.org/wiki/Data_URI_scheme).
 
-### Filter
+### As a Twig Filter
 
 	{{ asset|image64 }}
 
