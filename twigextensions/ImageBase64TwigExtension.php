@@ -7,7 +7,7 @@ namespace Craft;
  *
  * @author David Guyon <dguyon@gmail.com>
  * @link http://yoann.aparici.fr/post/18599782775/extension-twig-pour-encoder-les-images-en-base-64
- * 
+ *
  * @author Michael Reiner [Thanks to David, he did all the work! Just converting for use as a Craft CMS plugin.]
  * @link http://mreiner.me
  */
@@ -42,27 +42,26 @@ class ImageBase64TwigExtension extends \Twig_Extension
      */
     public function image64($asset, $inline = false)
     {
-
-        // Require an instance of `AssetFileModel`
-        if (! $asset instanceof AssetFileModel)
+        // Require an instance of `AssetFileModel` and an image
+        if ($asset instanceof AssetFileModel && 0 === strpos($asset->getMimeType(), 'image/'))
+        {
+            // Get the file.
+            $binary = file_get_contents($asset->getUrl());
+        }
+        // Or, ensure the mime type is an image.
+        else if (0 === strpos(mime_content_type($asset), 'image/'))
+        {
+            $binary = file_get_contents($asset);
+            $asset = new \SplFileInfo($asset);
+        }
+        else
         {
             // Die quietly.
             return false;
         }
-
-        // Make sure the mime type is an image.
-        if (0 !== strpos($asset->getMimeType(), 'image/'))
-        {
-            // Die quietly.
-            return false;
-        }
-
-        // Get the file.
-        $binary = file_get_contents($asset->getUrl());
 
         // Return the string.
         return $inline ? sprintf('data:image/%s;base64,%s', $asset->getExtension(), base64_encode($binary)) : base64_encode($binary);
-
     }
 
     /**
