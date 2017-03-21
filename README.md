@@ -2,6 +2,14 @@
 
 A simple Twig extension for [Craft CMS](http://buildwithcraft.com) to create base64-encoded strings from Craft [Assets](http://buildwithcraft.com/docs/templating/assetfilemodel) in your Twig templates.
 
+## Updates
+### 0.2.0-beta1
+- Added support for passing in an asset URL. In Craft 2.x, the user profile photo is not a native `Asset` element (it will be in Craft 3.x). To use this plugin with the native user profile photo, you can now pass in the `photoUrl` from a `UserModel`:
+
+        {{ image64(currentUser.photoUrl) }}
+        
+        <img src="{{ image64(currentUser.photoUrl, true) }}" alt="{{ currentUser.fullName }}">
+
 ## Installation
 
 1. Download the `.zip` and copy the `Craft-Twig-ImageBase64` directory into your Craft `plugins` directory.
@@ -12,29 +20,32 @@ A simple Twig extension for [Craft CMS](http://buildwithcraft.com) to create bas
 
 ## Requirements
 
-This Twig extension requires that you pass an instance of Craft's [`AssetFileModel`](http://buildwithcraft.com/docs/templating/assetfilemodel) in your Twig template.
+This Twig extension requires that you pass either:
+    - An instance of Craft's [`AssetFileModel`](http://buildwithcraft.com/docs/templating/assetfilemodel)
+    - A Craft Asset URL 
+in your Twig template.
 
 ## Usage
 
-The extension can be used as either a Twig filter or as a Twig extension.
+The extension can be used as either a Twig filter or as a Twig extension, thought only the function supports the `inline` parameter which is useful for using the encoded string as the source for an `<img>`.
 
 ### As a Twig Function
 
 #### With default options
 
 	{{ image64(asset) }}
+    {{ image64(asset.url) }}
 
 #### With `inline` set to `true`
 
 	{{ image64(asset, true) }}
+	{{ image64(asset.url, true) }}
 
 This will return the base64-encoded string in a [data URI scheme](http://en.wikipedia.org/wiki/Data_URI_scheme).
 
 ### As a Twig Filter
 
 	{{ asset|image64 }}
-
-**Note:** In either case, `asset` must be an instance of Craft's [`AssetFileModel`](http://buildwithcraft.com/docs/templating/assetfilemodel). The extension will die gracefully if anything other than that is passed in as the first parameter.
 
 ## Options
 
